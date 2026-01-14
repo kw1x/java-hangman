@@ -13,10 +13,13 @@ public class GameSession {
     private int attemptsMade;
 
     public GameSession(Word word, int maxAttempts) {
-        this.word = Objects.requireNonNull(word, "Word cannot be null");
+        if (word == null) {
+            throw new IllegalArgumentException("Word cannot be null");
+        }
         if (maxAttempts <= 0) {
             throw new IllegalArgumentException("Max attempts must be positive");
         }
+        this.word = word;
         this.maxAttempts = maxAttempts;
         this.guessedLetters = new HashSet<>();
         this.attemptsMade = 0;
