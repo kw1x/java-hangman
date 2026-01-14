@@ -62,12 +62,11 @@ public class HangmanGame {
 
     private GuessResult createResult(String message) {
         return new GuessResult(
-            session.getCurrentState(),
-            session.getAttemptsMade(),
-            session.getMaxAttempts(),
-            session.getGameResult(),
-            message
-        );
+                session.getCurrentState(),
+                session.getAttemptsMade(),
+                session.getMaxAttempts(),
+                session.getGameResult(),
+                message);
     }
 
     public GuessResult getCurrentResult() {

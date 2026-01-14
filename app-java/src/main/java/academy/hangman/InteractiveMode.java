@@ -6,7 +6,6 @@ import academy.hangman.repository.InMemoryWordRepository;
 import academy.hangman.repository.WordRepository;
 import academy.hangman.ui.ConsoleInput;
 import academy.hangman.ui.HangmanRenderer;
-
 import java.util.Random;
 
 public class InteractiveMode {
@@ -37,8 +36,8 @@ public class InteractiveMode {
         Category category = selectCategory();
         Difficulty difficulty = selectDifficulty();
 
-        Word word = wordRepository.getRandomWord(category, difficulty)
-            .orElseGet(() -> wordRepository.getRandomWord()
+        Word word = wordRepository.getRandomWord(category, difficulty).orElseGet(() -> wordRepository
+                .getRandomWord()
                 .orElseThrow(() -> new RuntimeException("Нет доступных слов")));
 
         System.out.println("\n🎮 Начинаем игру!");
@@ -54,7 +53,7 @@ public class InteractiveMode {
         }
 
         HangmanGame game = new HangmanGame(word, word.difficulty().getMaxAttempts());
-        
+
         while (!game.getSession().isGameOver()) {
             GuessResult result = game.getCurrentResult();
             renderer.displayGameState(result);
@@ -73,7 +72,7 @@ public class InteractiveMode {
     private Category selectCategory() {
         System.out.println("\nВыберите категорию:");
         Category[] categories = Category.values();
-        
+
         for (int i = 0; i < categories.length; i++) {
             System.out.println((i + 1) + ". " + categories[i].getDisplayName());
         }
@@ -93,8 +92,8 @@ public class InteractiveMode {
         Difficulty[] difficulties = Difficulty.values();
 
         for (int i = 0; i < difficulties.length; i++) {
-            System.out.println((i + 1) + ". " + difficulties[i] + 
-                " (" + difficulties[i].getMaxAttempts() + " попыток)");
+            System.out.println(
+                    (i + 1) + ". " + difficulties[i] + " (" + difficulties[i].getMaxAttempts() + " попыток)");
         }
         System.out.println("0. Случайная сложность");
 

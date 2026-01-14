@@ -73,7 +73,7 @@ public class HangmanRenderer {
         if (attempts >= maxAttempts) {
             return HANGMAN_STAGES[HANGMAN_STAGES.length - 1];
         }
-        
+
         // Вычисляем индекс стадии пропорционально количеству ошибок
         int stageIndex = (int) ((double) attempts / maxAttempts * (HANGMAN_STAGES.length - 1));
         return HANGMAN_STAGES[Math.min(stageIndex, HANGMAN_STAGES.length - 1)];
@@ -100,7 +100,7 @@ public class HangmanRenderer {
     public void displayGameOver(GuessResult result, String word) {
         System.out.println("\n" + "=".repeat(50));
         System.out.println(renderHangman(result.attemptsMade(), result.maxAttempts()));
-        
+
         switch (result.gameResult()) {
             case WON -> {
                 System.out.println("🎉 ПОЗДРАВЛЯЕМ! ВЫ ВЫИГРАЛИ! 🎉");
@@ -112,16 +112,16 @@ public class HangmanRenderer {
             }
             default -> {}
         }
-        
+
         System.out.println("=".repeat(50) + "\n");
     }
 
     private String formatWord(String word) {
         return word.chars()
-            .mapToObj(c -> String.valueOf((char) c))
-            .reduce((a, b) -> a + " " + b)
-            .orElse("")
-            .toUpperCase();
+                .mapToObj(c -> String.valueOf((char) c))
+                .reduce((a, b) -> a + " " + b)
+                .orElse("")
+                .toUpperCase();
     }
 
     public void clearScreen() {

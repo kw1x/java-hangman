@@ -1,27 +1,26 @@
 package academy.hangman.game;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import academy.hangman.model.Category;
 import academy.hangman.model.Difficulty;
 import academy.hangman.model.GameResult;
 import academy.hangman.model.GuessResult;
 import academy.hangman.model.Word;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.Test;
 
 class HangmanGameTest {
-    
+
     private HangmanGame game;
     private Word testWord;
-    
+
     @BeforeEach
     void setUp() {
         testWord = new Word("тест", Category.ANIMALS, Difficulty.EASY);
         game = new HangmanGame(testWord, 6);
     }
-    
+
     @Test
     void shouldCorrectlyProcessGuessedLetter() {
         GuessResult result = game.guess('т');
@@ -30,7 +29,7 @@ class HangmanGameTest {
         assertThat(result.gameResult()).isEqualTo(GameResult.IN_PROGRESS);
         assertThat(result.message()).contains("Верно");
     }
-    
+
     @Test
     void shouldCorrectlyProcessWrongLetter() {
         GuessResult result = game.guess('х');
@@ -40,7 +39,7 @@ class HangmanGameTest {
         assertThat(result.gameResult()).isEqualTo(GameResult.IN_PROGRESS);
         assertThat(result.message()).contains("Неверно");
     }
-    
+
     @Test
     void shouldHandleLettersRegardlessOfCase() {
         GuessResult upperResult = game.guess('Т');
@@ -50,7 +49,7 @@ class HangmanGameTest {
         assertThat(upperResult.attemptsMade()).isEqualTo(0);
         assertThat(lowerResult.attemptsMade()).isEqualTo(0);
     }
-    
+
     @Test
     void shouldWinGameWhenAllLettersGuessed() {
         game.guess('т');
@@ -60,7 +59,7 @@ class HangmanGameTest {
         assertThat(finalResult.gameResult()).isEqualTo(GameResult.WON);
         assertThat(finalResult.message()).contains("Поздравляем");
     }
-    
+
     @Test
     void shouldLoseGameAfterMaxAttempts() {
         game.guess('х');
@@ -73,7 +72,7 @@ class HangmanGameTest {
         assertThat(finalResult.gameResult()).isEqualTo(GameResult.LOST);
         assertThat(finalResult.message()).contains("проиграли");
     }
-    
+
     @Test
     void shouldNotAllowActionsAfterGameOver() {
         game.guess('х');
@@ -86,7 +85,7 @@ class HangmanGameTest {
         assertThat(result.message()).contains("уже завершена");
         assertThat(result.gameResult()).isEqualTo(GameResult.LOST);
     }
-    
+
     @Test
     void shouldCorrectlyGuessWholeWord() {
         GuessResult result = game.guessWord("тест");
@@ -94,13 +93,13 @@ class HangmanGameTest {
         assertThat(result.gameResult()).isEqualTo(GameResult.WON);
         assertThat(result.message()).contains("угадали слово");
     }
-    
+
     @Test
     void shouldLoseWhenGuessingWrongWord() {
         GuessResult result = game.guessWord("неверно");
         assertThat(result.message()).contains("Неверно");
     }
-    
+
     @Test
     void shouldHandleWordGuessRegardlessOfCase() {
         GuessResult result = game.guessWord("ТЕСТ");

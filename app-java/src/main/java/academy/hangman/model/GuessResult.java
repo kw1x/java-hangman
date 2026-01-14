@@ -1,12 +1,7 @@
 package academy.hangman.model;
 
 public record GuessResult(
-    String currentState,
-    int attemptsMade,
-    int maxAttempts,
-    GameResult gameResult,
-    String message
-) {
+        String currentState, int attemptsMade, int maxAttempts, GameResult gameResult, String message) {
     public int remainingAttempts() {
         return maxAttempts - attemptsMade;
     }

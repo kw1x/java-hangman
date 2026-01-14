@@ -16,15 +16,15 @@ stages:
   stage: acceptance
   variables:
     DOCKER_HOST: tcp://docker:2376
-    DOCKER_TLS_CERTDIR: /certs
-    DOCKER_TLS_VERIFY: 1
-    DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
-  image: docker
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+  image: docker:29.0.1
   tags:
     - dind
   services:
     - name: docker:29.0.1-dind
       alias: docker
+      command: ["--tls=false"]
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == "master"
       when: always

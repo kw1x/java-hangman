@@ -60,14 +60,14 @@ public class ConsoleInput {
         while (true) {
             System.out.print(prompt + " (да/нет): ");
             String input = scanner.nextLine().trim().toLowerCase();
-            
+
             if (input.equals("да") || input.equals("yes") || input.equals("y") || input.equals("д")) {
                 return true;
             }
             if (input.equals("нет") || input.equals("no") || input.equals("n") || input.equals("н")) {
                 return false;
             }
-            
+
             System.out.println("Ошибка: введите 'да' или 'нет'.");
         }
     }

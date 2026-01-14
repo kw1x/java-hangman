@@ -3,7 +3,6 @@ package academy.hangman.repository;
 import academy.hangman.model.Category;
 import academy.hangman.model.Difficulty;
 import academy.hangman.model.Word;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,8 +56,8 @@ public class InMemoryWordRepository implements WordRepository {
     @Override
     public Optional<Word> getRandomWord(Category category, Difficulty difficulty) {
         List<Word> filtered = words.stream()
-            .filter(w -> w.category() == category && w.difficulty() == difficulty)
-            .collect(Collectors.toList());
+                .filter(w -> w.category() == category && w.difficulty() == difficulty)
+                .collect(Collectors.toList());
 
         if (filtered.isEmpty()) {
             return Optional.empty();

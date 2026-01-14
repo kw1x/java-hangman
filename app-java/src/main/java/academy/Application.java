@@ -1,5 +1,7 @@
 package academy;
 
+import static java.util.Objects.nonNull;
+
 import academy.hangman.InteractiveMode;
 import academy.hangman.TestMode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,31 +17,33 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
-import static java.util.Objects.nonNull;
 
-@Command(name = "Hangman Game", version = "1.0", mixinStandardHelpOptions = true,
-    description = "Консольная игра 'Виселица'")
+@Command(
+        name = "Hangman Game",
+        version = "1.0",
+        mixinStandardHelpOptions = true,
+        description = "Консольная игра 'Виселица'")
 public class Application implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
     private static final ObjectReader YAML_READER =
-        new ObjectMapper(new YAMLFactory()).findAndRegisterModules().reader();
+            new ObjectMapper(new YAMLFactory()).findAndRegisterModules().reader();
     private static final Predicate<String[]> IS_TESTING_MODE = words -> nonNull(words) && words.length == 2;
 
     @Option(
-        names = {"-s", "--font-size"},
-        description = "Font size")
+            names = {"-s", "--font-size"},
+            description = "Font size")
     int fontSize;
 
     @Parameters(
-        paramLabel = "<word>",
-        description = "Words pair for testing mode: <target_word> <guessed_letters>",
-        arity = "0..2")
+            paramLabel = "<word>",
+            description = "Words pair for testing mode: <target_word> <guessed_letters>",
+            arity = "0..2")
     private String[] words;
 
     @Option(
-        names = {"-c", "--config"},
-        description = "Path to YAML config file")
+            names = {"-c", "--config"},
+            description = "Path to YAML config file")
     private File configPath;
 
     public static void main(String[] args) {

@@ -2,8 +2,8 @@ package academy.hangman.game;
 
 import academy.hangman.model.GameResult;
 import academy.hangman.model.Word;
-
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class GameSession {
@@ -13,13 +13,10 @@ public class GameSession {
     private int attemptsMade;
 
     public GameSession(Word word, int maxAttempts) {
-        if (word == null) {
-            throw new IllegalArgumentException("Word cannot be null");
-        }
+        this.word = Objects.requireNonNull(word, "Word cannot be null");
         if (maxAttempts <= 0) {
             throw new IllegalArgumentException("Max attempts must be positive");
         }
-        this.word = word;
         this.maxAttempts = maxAttempts;
         this.guessedLetters = new HashSet<>();
         this.attemptsMade = 0;
@@ -27,7 +24,7 @@ public class GameSession {
 
     public boolean makeGuess(char letter) {
         char lowerLetter = Character.toLowerCase(letter);
-        
+
         if (guessedLetters.contains(lowerLetter)) {
             return false; // Already guessed
         }

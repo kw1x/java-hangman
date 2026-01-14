@@ -20,8 +20,7 @@ public record AppConfig(int fontSize, String[] words) {
     @Override
     @NotNull
     public String toString() {
-        return "AppConfig{" + "fontSize=" + fontSize +
-            ", words=" + (words == null ? "null" : Arrays.asList(words).toString()) +
-            '}';
+        return "AppConfig{" + "fontSize=" + fontSize + ", words="
+                + (words == null ? "null" : Arrays.asList(words).toString()) + '}';
     }
 }
