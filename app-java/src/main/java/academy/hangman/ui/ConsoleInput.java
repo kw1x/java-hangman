@@ -29,12 +29,10 @@ public class ConsoleInput {
             }
 
             char letter = input.charAt(0);
-            if (!Character.isLetter(letter)) {
-                System.out.println("Ошибка: введите букву, а не другой символ.");
-                continue;
+            if (Character.isLetter(letter)) {
+                return Character.toLowerCase(letter);
             }
-
-            return Character.toLowerCase(letter);
+            System.out.println("Ошибка: введите букву, а не другой символ.");
         }
     }
 
