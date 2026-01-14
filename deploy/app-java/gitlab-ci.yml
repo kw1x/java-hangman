@@ -14,8 +14,9 @@ build_java:
   stage: build
   image: maven:3.9.11-eclipse-temurin-24-noble
   script:
-  - mvn test $MAVEN_CLI_OPTS
-  - echo "Build stage example"
+    - cd app-java
+    - mvn test $MAVEN_CLI_OPTS
+    - echo "Build stage example"
   only:
     - merge_requests
     - master
