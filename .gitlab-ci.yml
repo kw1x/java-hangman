@@ -31,6 +31,7 @@ stages:
       allow_failure: false
     - when: never
   before_script:
+    - until docker info >/dev/null 2>&1; do echo "Waiting for docker daemon..."; sleep 2; done
     - echo "$CI_JOB_TOKEN" | docker login "$GITLAB_HOST" -u gitlab-ci-token --password-stdin
   script:
     - docker pull "$GITLAB_DOCKER_PROXY"/"$DOCKER_IMAGE"
