@@ -13,8 +13,8 @@ acceptance_test_java:
 build_java:
   stage: build
   script:
-#    - mvn verify $MAVEN_CLI_OPTS
-    - echo "Build stage example"
+  - mvn test $MAVEN_CLI_OPTS
+  - echo "Build stage example"
   only:
     - merge_requests
     - master
