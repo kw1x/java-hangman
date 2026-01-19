@@ -14,6 +14,11 @@ class ConsoleInputTest {
     private ByteArrayOutputStream outputStream;
     private PrintStream originalOut;
 
+    private ConsoleInput createConsoleInput(String input) {
+        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+        return new ConsoleInput(scanner);
+    }
+
     @BeforeEach
     void setUp() {
         outputStream = new ByteArrayOutputStream();
@@ -28,8 +33,7 @@ class ConsoleInputTest {
     @Test
     void shouldReturnValidLetterInput() {
         String input = "а\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        ConsoleInput consoleInput = new ConsoleInput(scanner);
+        ConsoleInput consoleInput = createConsoleInput(input);
         char result = consoleInput.readLetter();
         assertThat(result).isEqualTo('а');
         tearDown();
@@ -38,8 +42,7 @@ class ConsoleInputTest {
     @Test
     void shouldConvertToLowerCase() {
         String input = "А\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        ConsoleInput consoleInput = new ConsoleInput(scanner);
+        ConsoleInput consoleInput = createConsoleInput(input);
         char result = consoleInput.readLetter();
         assertThat(result).isEqualTo('а');
         tearDown();
@@ -49,8 +52,7 @@ class ConsoleInputTest {
     void shouldRejectMultipleCharactersAndRetryWithValidInput() {
         // Arrange - сначала вводим несколько символов, потом правильный
         String input = "abc\nа\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        ConsoleInput consoleInput = new ConsoleInput(scanner);
+        ConsoleInput consoleInput = createConsoleInput(input);
 
         // Act
         char result = consoleInput.readLetter();
@@ -66,8 +68,7 @@ class ConsoleInputTest {
     void shouldRejectEmptyInputAndRetryWithValidInput() {
         // Arrange - сначала пустой ввод, потом правильный
         String input = "\nа\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        ConsoleInput consoleInput = new ConsoleInput(scanner);
+        ConsoleInput consoleInput = createConsoleInput(input);
 
         // Act
         char result = consoleInput.readLetter();
@@ -83,8 +84,7 @@ class ConsoleInputTest {
     void shouldRejectNonLetterCharactersAndRetryWithValidInput() {
         // Arrange - сначала цифра, потом правильная буква
         String input = "5\nа\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        ConsoleInput consoleInput = new ConsoleInput(scanner);
+        ConsoleInput consoleInput = createConsoleInput(input);
 
         // Act
         char result = consoleInput.readLetter();
@@ -100,8 +100,7 @@ class ConsoleInputTest {
     void shouldRejectSpecialCharactersAndRetryWithValidInput() {
         // Arrange - сначала спецсимвол, потом правильная буква
         String input = "@\nб\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        ConsoleInput consoleInput = new ConsoleInput(scanner);
+        ConsoleInput consoleInput = createConsoleInput(input);
 
         // Act
         char result = consoleInput.readLetter();
@@ -117,8 +116,7 @@ class ConsoleInputTest {
     void shouldHandleMultipleInvalidInputsBeforeValidOne() {
         // Arrange - несколько неправильных вводов подряд
         String input = "\n123\n@#$\nвалидно\nв\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        ConsoleInput consoleInput = new ConsoleInput(scanner);
+        ConsoleInput consoleInput = createConsoleInput(input);
 
         // Act
         char result = consoleInput.readLetter();
@@ -135,8 +133,7 @@ class ConsoleInputTest {
     void shouldReadLineCorrectly() {
         // Arrange
         String input = "тестовая строка\n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        ConsoleInput consoleInput = new ConsoleInput(scanner);
+        ConsoleInput consoleInput = createConsoleInput(input);
 
         // Act
         String result = consoleInput.readLine("Введите строку: ");
@@ -150,8 +147,7 @@ class ConsoleInputTest {
     void shouldTrimSpacesInReadLine() {
         // Arrange
         String input = "  пробелы  \n";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
-        ConsoleInput consoleInput = new ConsoleInput(scanner);
+        ConsoleInput consoleInput = createConsoleInput(input);
 
         // Act
         String result = consoleInput.readLine("Введите: ");

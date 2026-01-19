@@ -3,87 +3,67 @@ package academy.hangman.model;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class GuessResultTest {
 
-    @Test
-    void shouldCreateGuessResultCorrectly() {
-        GuessResult result = new GuessResult("к**", 2, 6, GameResult.IN_PROGRESS, "Попробуйте еще");
-        assertThat(result.currentState()).isEqualTo("к**");
-        assertThat(result.attemptsMade()).isEqualTo(2);
-        assertThat(result.maxAttempts()).isEqualTo(6);
-        assertThat(result.gameResult()).isEqualTo(GameResult.IN_PROGRESS);
-        assertThat(result.message()).isEqualTo("Попробуйте еще");
+    @ParameterizedTest
+    @CsvSource({
+    "к**,2,6,IN_PROGRESS,Попробуйте еще",
+    "кот,3,6,WON,Победа!",
+    "***,5,5,LOST,Поражение"
+})
+    void shouldCreateGuessResultCorrectly(String state, int made, int max, String result, String message) {
+        GuessResult gr = new GuessResult(state, made, max, GameResult.valueOf(result), message);
+        assertThat(gr.currentState()).isEqualTo(state);
+        assertThat(gr.attemptsMade()).isEqualTo(made);
+        assertThat(gr.maxAttempts()).isEqualTo(max);
+        assertThat(gr.gameResult()).isEqualTo(GameResult.valueOf(result));
+        assertThat(gr.message()).isEqualTo(message);
     }
 
-    @Test
-    void shouldCalculateRemainingAttemptsCorrectly() {
-        GuessResult result = new GuessResult("**", 3, 7, GameResult.IN_PROGRESS, "Продолжайте");
-        assertThat(result.remainingAttempts()).isEqualTo(4);
+    @ParameterizedTest
+    @CsvSource({
+        "**,3,7,IN_PROGRESS,Продолжайте,4",
+        "***,0,8,IN_PROGRESS,Начинаем,8",
+        "***,5,5,LOST,Поражение,0"
+    })
+    void shouldCalculateRemainingAttemptsCorrectly(String state, int made, int max, String result, String message, int expected) {
+        GuessResult gr = new GuessResult(state, made, max, GameResult.valueOf(result), message);
+        assertThat(gr.remainingAttempts()).isEqualTo(expected);
     }
 
-    @Test
-    void shouldDetectGameOverForWonState() {
-        GuessResult result = new GuessResult("слово", 2, 5, GameResult.WON, "Победа!");
-        assertThat(result.isGameOver()).isTrue();
+    @ParameterizedTest
+    @CsvSource({
+        "слово,2,5,WON,Победа!,true",
+        "***,5,5,LOST,Поражение,true",
+        "к*т,2,5,IN_PROGRESS,Продолжайте,false"
+    })
+    void shouldDetectGameOverCorrectly(String state, int made, int max, String result, String message, boolean expected) {
+        GuessResult gr = new GuessResult(state, made, max, GameResult.valueOf(result), message);
+        assertThat(gr.isGameOver()).isEqualTo(expected);
     }
 
-    @Test
-    void shouldDetectGameOverForLostState() {
-        GuessResult result = new GuessResult("***", 5, 5, GameResult.LOST, "Поражение");
-        assertThat(result.isGameOver()).isTrue();
+    @ParameterizedTest
+    @CsvSource({
+        "кот,3,6,WON,Победа!,кот;POS",
+        "к**,6,6,LOST,Поражение,к**;NEG",
+        "к*т,2,6,IN_PROGRESS,Продолжайте,к*т;NEG"
+    })
+    void shouldFormatForTestCorrectly(String state, int made, int max, String result, String message, String expected) {
+        GuessResult gr = new GuessResult(state, made, max, GameResult.valueOf(result), message);
+        assertThat(gr.formatForTest()).isEqualTo(expected);
     }
 
-    @Test
-    void shouldNotDetectGameOverForInProgressState() {
-        GuessResult result = new GuessResult("к*т", 2, 5, GameResult.IN_PROGRESS, "Продолжайте");
-        assertThat(result.isGameOver()).isFalse();
-    }
-
-    @Test
-    void shouldFormatForTestCorrectlyForWin() {
-        // Act
-        GuessResult result = new GuessResult("кот", 3, 6, GameResult.WON, "Победа!");
-
-        // Assert
-        assertThat(result.formatForTest()).isEqualTo("кот;POS");
-    }
-
-    @Test
-    void shouldFormatForTestCorrectlyForLoss() {
-        // Act
-        GuessResult result = new GuessResult("к**", 6, 6, GameResult.LOST, "Поражение");
-
-        // Assert
-        assertThat(result.formatForTest()).isEqualTo("к**;NEG");
-    }
-
-    @Test
-    void shouldFormatForTestCorrectlyForInProgress() {
-        // Act
-        GuessResult result = new GuessResult("к*т", 2, 6, GameResult.IN_PROGRESS, "Продолжайте");
-
-        // Assert
-        assertThat(result.formatForTest()).isEqualTo("к*т;NEG");
-    }
-
-    @Test
-    void shouldHandleZeroRemainingAttempts() {
-        // Act
-        GuessResult result = new GuessResult("***", 5, 5, GameResult.LOST, "Поражение");
-
-        // Assert
-        assertThat(result.remainingAttempts()).isEqualTo(0);
-        assertThat(result.isGameOver()).isTrue();
-    }
-
-    @Test
-    void shouldHandleFullAttemptsAvailable() {
-        // Act
-        GuessResult result = new GuessResult("***", 0, 8, GameResult.IN_PROGRESS, "Начинаем");
-
-        // Assert
-        assertThat(result.remainingAttempts()).isEqualTo(8);
-        assertThat(result.isGameOver()).isFalse();
+    @ParameterizedTest
+    @CsvSource({
+        "***,5,5,LOST,Поражение,0,true",
+        "***,0,8,IN_PROGRESS,Начинаем,8,false"
+    })
+    void shouldHandleAttemptStates(String state, int made, int max, String result, String message, int expectedRemaining, boolean expectedGameOver) {
+        GuessResult gr = new GuessResult(state, made, max, GameResult.valueOf(result), message);
+        assertThat(gr.remainingAttempts()).isEqualTo(expectedRemaining);
+        assertThat(gr.isGameOver()).isEqualTo(expectedGameOver);
     }
 }

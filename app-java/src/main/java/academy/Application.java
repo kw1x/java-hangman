@@ -60,8 +60,13 @@ public class Application implements Runnable {
             LOGGER.atInfo().log("Non-interactive testing mode enabled");
             String targetWord = config.words()[0];
             String guessedLetters = config.words()[1];
-            String result = TestMode.runTest(targetWord, guessedLetters);
-            System.out.println(result);
+            try {
+                String result = TestMode.runTest(targetWord, guessedLetters);
+                System.out.println(result);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+
         } else {
             LOGGER.atInfo().log("Interactive mode enabled");
             InteractiveMode interactiveMode = new InteractiveMode();

@@ -11,11 +11,11 @@ public class TestMode {
     public static String runTest(String targetWord, String guessedWord) {
         // Валидация входных данных
         if (targetWord == null || targetWord.isBlank()) {
-            return "Unknown word";
+            throw new IllegalArgumentException("Unknown word");
         }
 
         if (guessedWord == null || guessedWord.isBlank()) {
-            return "Unknown word";
+            throw new IllegalArgumentException("Unknown word");
         }
 
         targetWord = targetWord.toLowerCase().trim();
@@ -23,7 +23,7 @@ public class TestMode {
 
         // Проверка корректности длины слова
         if (targetWord.length() < 2) {
-            return "Unknown word";
+            throw new IllegalArgumentException("Unknown word");
         }
 
         // Создаем слово с дефолтными параметрами
@@ -31,7 +31,7 @@ public class TestMode {
         try {
             word = new Word(targetWord, Category.ANIMALS, Difficulty.MEDIUM);
         } catch (IllegalArgumentException e) {
-            return "Unknown word";
+            throw new IllegalArgumentException("Unknown word");
         }
 
         // Создаем игровую сессию

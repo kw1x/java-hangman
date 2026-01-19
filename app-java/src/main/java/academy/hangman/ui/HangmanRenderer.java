@@ -3,6 +3,7 @@ package academy.hangman.ui;
 import academy.hangman.model.GuessResult;
 
 public class HangmanRenderer {
+    private static final int SEPARATOR_LENGTH = 50;
     private static final String[] HANGMAN_STAGES = {
         """
          +---+
@@ -80,11 +81,12 @@ public class HangmanRenderer {
     }
 
     public void displayGameState(GuessResult result) {
-        System.out.println("\n" + "=".repeat(50));
+    
+        System.out.println("\n" + "=".repeat(SEPARATOR_LENGTH));
         System.out.println(renderHangman(result.attemptsMade(), result.maxAttempts()));
         System.out.println("Слово: " + formatWord(result.currentState()));
         System.out.println("Попыток осталось: " + result.remainingAttempts() + " из " + result.maxAttempts());
-        System.out.println("=".repeat(50));
+        System.out.println("=".repeat(SEPARATOR_LENGTH));
     }
 
     public void displayMessage(String message) {
@@ -92,13 +94,13 @@ public class HangmanRenderer {
     }
 
     public void displayWelcome() {
-        System.out.println("\n" + "=".repeat(50));
+        System.out.println("\n" + "=".repeat(SEPARATOR_LENGTH));
         System.out.println("         ДОБРО ПОЖАЛОВАТЬ В ИГРУ 'ВИСЕЛИЦА'");
-        System.out.println("=".repeat(50));
+        System.out.println("=".repeat(SEPARATOR_LENGTH));
     }
 
     public void displayGameOver(GuessResult result, String word) {
-        System.out.println("\n" + "=".repeat(50));
+        System.out.println("\n" + "=".repeat(SEPARATOR_LENGTH));
         System.out.println(renderHangman(result.attemptsMade(), result.maxAttempts()));
 
         switch (result.gameResult()) {
@@ -113,7 +115,7 @@ public class HangmanRenderer {
             default -> {}
         }
 
-        System.out.println("=".repeat(50) + "\n");
+        System.out.println("=".repeat(SEPARATOR_LENGTH) + "\n");
     }
 
     private String formatWord(String word) {

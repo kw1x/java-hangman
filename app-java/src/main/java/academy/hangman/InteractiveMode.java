@@ -69,40 +69,41 @@ public class InteractiveMode {
         }
     }
 
-    private Category selectCategory() {
-        System.out.println("\nВыберите категорию:");
-        Category[] categories = Category.values();
-
-        for (int i = 0; i < categories.length; i++) {
-            System.out.println((i + 1) + ". " + categories[i].getDisplayName());
+    private <T extends Enum<T>> T selectEnum(
+        String title,
+        T[] values,
+        java.util.function.Function<T, String> displayFn,
+        String randomLabel
+    ) {
+        System.out.println("\n" + title + ":");
+        for (int i = 0; i < values.length; i++) {
+            System.out.println((i + 1) + ". " + displayFn.apply(values[i]));
         }
-        System.out.println("0. Случайная категория");
+        System.out.println("0. " + randomLabel);
 
-        int choice = input.readInt("Ваш выбор: ", 0, categories.length);
+        int choice = input.readInt("Ваш выбор: ", 0, values.length);
 
         if (choice == 0) {
-            return categories[random.nextInt(categories.length)];
+            return values[random.nextInt(values.length)];
         }
+        return values[choice -1];
+    }
 
-        return categories[choice - 1];
+    private Category selectCategory() {
+        return selectEnum(
+                "Выберите категорию",
+                Category.values(),
+                Category::getDisplayName,
+                "Случайная категория"
+        );
     }
 
     private Difficulty selectDifficulty() {
-        System.out.println("\nВыберите уровень сложности:");
-        Difficulty[] difficulties = Difficulty.values();
-
-        for (int i = 0; i < difficulties.length; i++) {
-            System.out.println(
-                    (i + 1) + ". " + difficulties[i] + " (" + difficulties[i].getMaxAttempts() + " попыток)");
-        }
-        System.out.println("0. Случайная сложность");
-
-        int choice = input.readInt("Ваш выбор: ", 0, difficulties.length);
-
-        if (choice == 0) {
-            return difficulties[random.nextInt(difficulties.length)];
-        }
-
-        return difficulties[choice - 1];
+        return selectEnum(
+                "Выберите сложность",
+                Difficulty.values(),
+                Difficulty::name,
+                "Случайная сложность"
+        );
     }
 }

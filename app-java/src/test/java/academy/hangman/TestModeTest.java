@@ -34,48 +34,29 @@ class TestModeTest {
 
     @Test
     void shouldReturnUnknownWordForNullTarget() {
-        String result = TestMode.runTest(null, "кот");
-        assertThat(result).isEqualTo("Unknown word");
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> TestMode.runTest(null, "кот"));
     }
 
     @Test
     void shouldReturnUnknownWordForEmptyTarget() {
-        // Act
-        String result1 = TestMode.runTest("", "кот");
-        String result2 = TestMode.runTest("   ", "кот");
-
-        // Assert
-        assertThat(result1).isEqualTo("Unknown word");
-        assertThat(result2).isEqualTo("Unknown word");
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> TestMode.runTest("", "кот"));
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> TestMode.runTest("   ", "кот"));
     }
 
     @Test
     void shouldReturnUnknownWordForNullGuess() {
-        // Act
-        String result = TestMode.runTest("кот", null);
-
-        // Assert
-        assertThat(result).isEqualTo("Unknown word");
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> TestMode.runTest("кот", null));
     }
 
     @Test
     void shouldReturnUnknownWordForEmptyGuess() {
-        // Act
-        String result1 = TestMode.runTest("кот", "");
-        String result2 = TestMode.runTest("кот", "   ");
-
-        // Assert
-        assertThat(result1).isEqualTo("Unknown word");
-        assertThat(result2).isEqualTo("Unknown word");
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> TestMode.runTest("кот", ""));
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> TestMode.runTest("кот", "   "));
     }
 
     @Test
     void shouldReturnUnknownWordForTooShortTarget() {
-        // Act
-        String result = TestMode.runTest("а", "а");
-
-        // Assert
-        assertThat(result).isEqualTo("Unknown word");
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> TestMode.runTest("а", "а"));
     }
 
     @Test

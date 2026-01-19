@@ -3,8 +3,8 @@ package academy.hangman.game;
 import academy.hangman.model.GameResult;
 import academy.hangman.model.Word;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class GameSession {
     private final Word word;
@@ -12,6 +12,7 @@ public class GameSession {
     private final Set<Character> guessedLetters;
     private int attemptsMade;
 
+    @SuppressFBWarnings("CT_CONSTRUCTOR_THROW")   
     public GameSession(Word word, int maxAttempts) {
         if (word == null) {
             throw new IllegalArgumentException("Word cannot be null");
