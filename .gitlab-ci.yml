@@ -15,22 +15,23 @@ stages:
 .acceptance_test:
   stage: acceptance
   variables:
-    DOCKER_HOST: tcp://docker:2376
-    DOCKER_TLS_CERTDIR: /certs
-    DOCKER_TLS_VERIFY: 1
-    DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
-  image: docker
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+  image: docker:29.0.1
   tags:
     - dind
   services:
-    - name: docker:dind
+    - name: docker:29.0.1-dind
       alias: docker
+      command: ["dockerd", "--host=tcp://0.0.0.0:2375", "--tls=false"]
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == "master"
       when: always
       allow_failure: false
     - when: never
   before_script:
+    - sleep 10
     - echo "$CI_JOB_TOKEN" | docker login "$GITLAB_HOST" -u gitlab-ci-token --password-stdin
   script:
     - docker pull "$GITLAB_DOCKER_PROXY"/"$DOCKER_IMAGE"
